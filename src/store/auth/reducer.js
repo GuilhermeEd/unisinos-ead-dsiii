@@ -4,14 +4,14 @@ import * as types from './types';
 const initialState = {
   user: null,
   loading: false,
-  error: null,
+  error: null
 };
 
 export default createReducer(initialState, {
   [types.LOGIN_REQUEST]: (state, action) => ({
     ...state,
     loading: true,
-    error: initialState.error,
+    error: initialState.error
   }),
   [types.LOGIN_SUCCESS]: (state, action) => ({
     ...state,
@@ -22,6 +22,6 @@ export default createReducer(initialState, {
   [types.LOGIN_FAILURE]: (state, action) => ({
     ...state,
     loading: false,
-    error: action.payload,
-  }),
+    error: action.payload
+  })
 });
