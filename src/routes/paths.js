@@ -1,34 +1,33 @@
 import Template from '../template/Template';
-import LoginPage from '../pages/LoginPage';
+// import LoginPage from '../pages/LoginPage';
 import NewUserPage from '../pages/NewUserPage';
 import NewProjectPage from '../pages/NewProjectPage';
 import DonatePage from '../pages/DonatePage';
 
-export const privatePaths = [
+export const adminPaths = [];
+
+export const privatePaths = [];
+
+export const publicPaths = [
+  // {
+  //   name: '/login',
+  //   component: LoginPage,
+  //   default: true
+  // }
   {
     name: '/new-user',
     component: NewUserPage,
-    template: Template
+    template: Template,
+    default: true
   },
   {
     name: '/new-project',
     component: NewProjectPage,
-    template: Template,
-    default: true
-  }
-];
-
-export const notLoggedPaths = [
-  {
-    name: '/login',
-    component: LoginPage
-  }
-];
-
-export const publicPaths = [
+    template: Template
+  },
   {
     name: '/donate',
     component: DonatePage,
-    default: true
+    template: Template
   }
 ];

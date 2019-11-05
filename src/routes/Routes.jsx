@@ -8,12 +8,15 @@ import reverse from 'lodash/reverse';
 import LoginPage from '../pages/LoginPage';
 
 import TemplateRoute from './TemplateRoute';
-import { privatePaths, notLoggedPaths, publicPaths } from './paths';
+import { adminPaths, privatePaths, publicPaths } from './paths';
 
 const Routes = ({ user }) => {
+  const loggedPaths =
+    user && user.role === 'admin' ? [...adminPaths, ...privatePaths] : privatePaths;
+
   const defaultPath = user
-    ? privatePaths.find(path => !!path.default)
-    : [...notLoggedPaths, ...publicPaths].find(path => !!path.default);
+    ? loggedPaths.find(path => !!path.default)
+    : publicPaths.find(path => !!path.default);
 
   const setRoute = path =>
     path.template ? (
@@ -46,9 +49,8 @@ const Routes = ({ user }) => {
   );
 
   const routesPrecedence = [
-    privatePaths.map(setPrivateRoute),
-    notLoggedPaths.map(user ? setRedirect : setRoute),
-    publicPaths.map(setRoute)
+    ...loggedPaths.map(setPrivateRoute),
+    ...publicPaths.map(user ? setRedirect : setRoute)
   ];
 
   const routes = user ? routesPrecedence : reverse(routesPrecedence);
@@ -67,8 +69,13 @@ Routes.propTypes = {
   user: PropTypes.shape({
     name: PropTypes.string,
     email: PropTypes.string,
-    token: PropTypes.string
-  }).isRequired
+    token: PropTypes.string,
+    role: PropTypes.string
+  })
+};
+
+Routes.defaultProps = {
+  user: null
 };
 
 const mapStateToProps = ({ auth }) => ({
