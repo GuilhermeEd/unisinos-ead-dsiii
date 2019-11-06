@@ -4,13 +4,13 @@ import { Form } from 'antd';
 import get from 'lodash/get';
 
 const withValidation = Component => props => {
-  const { form, field, label } = props;
+  const { form, field, label, hideLabel } = props;
 
   const error = get(form.errors, field.name);
 
   return (
     <Form.Item
-      label={label}
+      label={!hideLabel && label}
       hasFeedback={!!error}
       validateStatus={error ? 'error' : ''}
       help={error}

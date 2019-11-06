@@ -4,8 +4,8 @@ import { Input } from 'antd';
 
 import withValidation from '../hocs/withValidation';
 
-const TextInput = ({ field }) => {
-  return <Input allowClear {...field} />;
+const TextInput = ({ field, ...rest }) => {
+  return <Input allowClear {...field} {...rest} />;
 };
 
 TextInput.propTypes = {
