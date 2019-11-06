@@ -12,27 +12,44 @@ import CheckboxInput from '../inputs/CheckboxInput';
 import DescriptionInput from '../inputs/DescriptionInput';
 import SubmitButton from '../buttons/SubmitButton';
 
+import * as Styled from './styles/Form.styles';
+
 const MIN_DATE = moment().endOf('day');
 
 const ProjectForm = ({ handleSubmit }) => {
   return (
     <Form onSubmit={handleSubmit}>
-      <Field name="name" label="Nome" component={TextInput} />
-      <Field name="objective" label="Objetivo" component={MoneyInput} />
-      <Field
-        name="dt_start"
-        label="Data de Início"
-        component={DateInput}
-        placeholder="Data de Início"
-        disabledDate={date => date < MIN_DATE}
-      />
-      <Field
-        name="dt_end"
-        label="Data Fim"
-        component={DateInput}
-        placeholder="Data Fim"
-        disabledDate={date => date < MIN_DATE}
-      />
+      <Styled.Group>
+        <Styled.Item flex={3}>
+          <Field name="name" label="Nome" component={TextInput} />
+        </Styled.Item>
+        <Styled.Item flex={1}>
+          <Field name="objective" label="Objetivo" component={MoneyInput} />
+        </Styled.Item>
+      </Styled.Group>
+      <Styled.Group>
+        <Styled.Item flex={1}>
+          <Field
+            name="dt_start"
+            label="Data de Início"
+            component={DateInput}
+            placeholder="Data de Início"
+            disabledDate={date => date < MIN_DATE}
+          />
+        </Styled.Item>
+        <Styled.Item flex={1}>
+          <Field
+            name="dt_end"
+            label="Data Fim"
+            component={DateInput}
+            placeholder="Data Fim"
+            disabledDate={date => date < MIN_DATE}
+          />
+        </Styled.Item>
+        <Styled.Item flex={3}>
+          <Field name="website" label="Website" component={TextInput} placeholder="Website" />
+        </Styled.Item>
+      </Styled.Group>
       <Field
         hideLabel
         name="endOnObjective"

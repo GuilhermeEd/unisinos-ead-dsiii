@@ -14,35 +14,66 @@ import UFInput from '../inputs/UFInput';
 import PaymentMethodInput from '../inputs/PaymentMethodInput';
 import SubmitButton from '../buttons/SubmitButton';
 
+import * as Styled from './styles/Form.styles';
+
 const MAX_BIRTHDAY_DATE = moment().startOf('day');
 
 const DonatorForm = ({ handleSubmit }) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Field name="email" label="Email" component={EmailInput} />
-      <Field name="password" label="Senha" component={PasswordInput} />
-      <Field name="passwordConfirmation" label="Confirmar Senha" component={PasswordInput} />
-      <Field name="name" label="Nome" component={TextInput} placeholder="Nome" />
-      <Field name="cpf" label="CPF" component={TextInput} placeholder="CPF (somente números)" />
-      <Field
-        name="birthday"
-        label="Data de Nascimento"
-        component={DateInput}
-        placeholder="Data de Nascimento"
-        disabledDate={date => date > MAX_BIRTHDAY_DATE}
-      />
-      <Field name="cep" label="CEP" component={CEPInput} placeholder="CEP" />
-      <Field name="uf" label="UF" component={UFInput} placeholder="UF" />
-      <Field name="city" label="Cidade" component={TextInput} placeholder="Cidade" />
-      <Field name="neighborhood" label="Bairro" component={TextInput} placeholder="Bairro" />
-      <Field name="phone" label="Telefone" component={TextInput} placeholder="Telefone" />
-      <Field
-        name="paymentMethod"
-        label="Preferência para doação"
-        component={PaymentMethodInput}
-        placeholder="Preferência para doação"
-      />
-      <Field name="website" label="Website" component={TextInput} placeholder="Website" />
+      <Styled.Group>
+        <Styled.Item flex={1}>
+          <Field name="password" label="Senha" component={PasswordInput} />
+        </Styled.Item>
+        <Styled.Item flex={1}>
+          <Field name="passwordConfirmation" label="Confirmar Senha" component={PasswordInput} />
+        </Styled.Item>
+      </Styled.Group>
+      <Styled.Group>
+        <Styled.Item flex={5}>
+          <Field name="name" label="Nome" component={TextInput} placeholder="Nome" />
+        </Styled.Item>
+        <Styled.Item flex={3}>
+          <Field name="cpf" label="CPF" component={TextInput} placeholder="CPF (somente números)" />
+        </Styled.Item>
+        <Styled.Item flex={2}>
+          <Field
+            name="birthday"
+            label="Data de Nascimento"
+            component={DateInput}
+            placeholder="Data de Nascimento"
+            disabledDate={date => date > MAX_BIRTHDAY_DATE}
+          />
+        </Styled.Item>
+      </Styled.Group>
+      <Styled.Group>
+        <Styled.Item flex={3}>
+          <Field name="cep" label="CEP" component={CEPInput} placeholder="CEP" />
+        </Styled.Item>
+        <Styled.Item flex={1}>
+          <Field name="uf" label="UF" component={UFInput} placeholder="UF" />
+        </Styled.Item>
+        <Styled.Item flex={4}>
+          <Field name="city" label="Cidade" component={TextInput} placeholder="Cidade" />
+        </Styled.Item>
+        <Styled.Item flex={3}>
+          <Field name="neighborhood" label="Bairro" component={TextInput} placeholder="Bairro" />
+        </Styled.Item>
+      </Styled.Group>
+      <Styled.Group>
+        <Styled.Item>
+          <Field name="phone" label="Telefone" component={TextInput} placeholder="Telefone" />
+        </Styled.Item>
+        <Styled.Item flex={1}>
+          <Field
+            name="paymentMethod"
+            label="Preferência para doação"
+            component={PaymentMethodInput}
+            placeholder="Preferência para doação"
+          />
+        </Styled.Item>
+      </Styled.Group>
       <SubmitButton />
     </Form>
   );
