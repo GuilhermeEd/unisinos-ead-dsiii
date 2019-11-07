@@ -7,7 +7,7 @@ import withValidation from '../hocs/withValidation';
 const CheckboxInput = ({ field, form, label }) => {
   const handleChange = e => {
     const { checked } = e.target;
-    form.setFieldValue(field.name, checked);
+    form.setFieldValue(field.name, checked ? 1 : 0);
   };
 
   return (

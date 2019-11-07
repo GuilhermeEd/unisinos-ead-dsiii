@@ -55,19 +55,12 @@ const ProjectForm = ({ handleSubmit }) => {
           <Field name="URL" label="Website" component={TextInput} placeholder="Website" />
         </Styled.Item>
       </Styled.Group>
-      <Styled.Group>
-        <Styled.Item flex={1}>
-          <Field
-            hideLabel
-            name="encerrar_projeto_objetivo"
-            label="Encerrar projeto ao atingir o objetivo de arrecadação"
-            component={CheckboxInput}
-          />
-        </Styled.Item>
-        <Styled.Item>
-          <Field hideLabel name="ativo" label="Ativo" component={CheckboxInput} />
-        </Styled.Item>
-      </Styled.Group>
+      <Field
+        hideLabel
+        name="encerrar_projeto_objetivo"
+        label="Encerrar projeto ao atingir o objetivo de arrecadação"
+        component={CheckboxInput}
+      />
       <Field name="descricao" label="Descrição" component={DescriptionInput} />
       <SubmitButton />
     </Form>
@@ -91,17 +84,17 @@ const validationSchema = yup.object().shape({
     .date()
     .min(MIN_DATE.toISOString())
     .required(),
-  data_fim: yup
-    .date()
-    .min(MIN_DATE.toISOString())
-    .required(),
+  data_fim: yup.date().min(MIN_DATE.toISOString()),
   URL: yup.string().required(),
   encerrar_projeto_objetivo: yup.bool(),
   descricao: yup.string()
 });
 
 const handleSubmit = (values, formikBag) => {
-  formikBag.props.createProject(values);
+  const payload = { ...values };
+  payload.codigo = 1;
+  payload.codigo_usuario = 1;
+  formikBag.props.createProject(payload);
 };
 
 const enhance = compose(
