@@ -94,6 +94,7 @@ const handleSubmit = (values, formikBag) => {
   const payload = { ...values };
   payload.codigo = 1;
   payload.codigo_usuario = 1;
+  payload.ativo = 1;
   formikBag.props.createProject(payload);
 };
 
