@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { Field, withFormik } from 'formik';
 import { Form } from 'antd';
 import moment from 'moment';
 
+import { createProject } from '../../store/projects/actions';
+
 import yup from '../../utils/yup';
+
 import TextInput from '../inputs/TextInput';
 import MoneyInput from '../inputs/MoneyInput';
 import DateInput from '../inputs/DateInput';
@@ -21,16 +26,16 @@ const ProjectForm = ({ handleSubmit }) => {
     <Form onSubmit={handleSubmit}>
       <Styled.Group>
         <Styled.Item flex={3}>
-          <Field name="name" label="Nome" component={TextInput} />
+          <Field name="nome" label="Nome" component={TextInput} />
         </Styled.Item>
         <Styled.Item flex={1}>
-          <Field name="objective" label="Objetivo" component={MoneyInput} />
+          <Field name="objetivo_arrecadacao" label="Objetivo" component={MoneyInput} />
         </Styled.Item>
       </Styled.Group>
       <Styled.Group>
         <Styled.Item flex={1}>
           <Field
-            name="dt_start"
+            name="data_inicio"
             label="Data de Início"
             component={DateInput}
             placeholder="Data de Início"
@@ -39,7 +44,7 @@ const ProjectForm = ({ handleSubmit }) => {
         </Styled.Item>
         <Styled.Item flex={1}>
           <Field
-            name="dt_end"
+            name="data_fim"
             label="Data Fim"
             component={DateInput}
             placeholder="Data Fim"
@@ -47,16 +52,23 @@ const ProjectForm = ({ handleSubmit }) => {
           />
         </Styled.Item>
         <Styled.Item flex={3}>
-          <Field name="website" label="Website" component={TextInput} placeholder="Website" />
+          <Field name="URL" label="Website" component={TextInput} placeholder="Website" />
         </Styled.Item>
       </Styled.Group>
-      <Field
-        hideLabel
-        name="endOnObjective"
-        label="Encerrar projeto ao atingir o objetivo de arrecadação"
-        component={CheckboxInput}
-      />
-      <Field name="description" label="Descrição" component={DescriptionInput} />
+      <Styled.Group>
+        <Styled.Item flex={1}>
+          <Field
+            hideLabel
+            name="encerrar_projeto_objetivo"
+            label="Encerrar projeto ao atingir o objetivo de arrecadação"
+            component={CheckboxInput}
+          />
+        </Styled.Item>
+        <Styled.Item>
+          <Field hideLabel name="ativo" label="Ativo" component={CheckboxInput} />
+        </Styled.Item>
+      </Styled.Group>
+      <Field name="descricao" label="Descrição" component={DescriptionInput} />
       <SubmitButton />
     </Form>
   );
@@ -67,27 +79,40 @@ ProjectForm.propTypes = {
 };
 
 const validationSchema = yup.object().shape({
-  name: yup
+  nome: yup
     .string()
     .min(3)
     .required(),
-  objective: yup
+  objetivo_arrecadacao: yup
     .number()
     .min(1)
     .required(),
-  dt_start: yup
+  data_inicio: yup
     .date()
     .min(MIN_DATE.toISOString())
     .required(),
-  dt_end: yup
+  data_fim: yup
     .date()
     .min(MIN_DATE.toISOString())
     .required(),
-  website: yup.string().required(),
-  endOnObjective: yup.bool(),
-  description: yup.string()
+  URL: yup.string().required(),
+  encerrar_projeto_objetivo: yup.bool(),
+  descricao: yup.string()
 });
 
-export default withFormik({
-  validationSchema
-})(ProjectForm);
+const handleSubmit = (values, formikBag) => {
+  formikBag.props.createProject(values);
+};
+
+const enhance = compose(
+  connect(
+    null,
+    { createProject }
+  ),
+  withFormik({
+    validationSchema,
+    handleSubmit
+  })
+);
+
+export default enhance(ProjectForm);

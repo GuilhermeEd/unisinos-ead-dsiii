@@ -5,7 +5,7 @@ import * as types from './types';
 import * as actions from './actions';
 import * as services from './services';
 
-export function* fetchCharacters({ payload: credentials }) {
+export function* login({ payload: credentials }) {
   try {
     const user = yield call(services.login, credentials);
     yield put(actions.loginSuccess(user));
@@ -17,7 +17,7 @@ export function* fetchCharacters({ payload: credentials }) {
 
 // Watchers
 export function* watchLogin() {
-  yield takeLatest(types.LOGIN_REQUEST, fetchCharacters);
+  yield takeLatest(types.LOGIN_REQUEST, login);
 }
 
 export default function*() {
