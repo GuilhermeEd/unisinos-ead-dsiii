@@ -8,6 +8,7 @@ import * as services from './services';
 export function* createProject({ payload }) {
   try {
     yield call(services.createProject, payload);
+    message.success('Projeto criado com sucesso!');
     yield put(actions.createProjectSuccess());
   } catch (error) {
     message.error(error.message);
