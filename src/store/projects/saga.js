@@ -16,11 +16,25 @@ export function* createProject({ payload }) {
   }
 }
 
+export function* fetchProjects({ payload }) {
+  try {
+    const projects = yield call(services.fetchProjects, payload);
+    yield put(actions.fetchProjectsSuccess(projects));
+  } catch (error) {
+    message.error(error.message);
+    yield put(actions.fetchProjectsFailure(error));
+  }
+}
+
 // Watchers
 export function* watchCreateProject() {
   yield takeLatest(types.CREATE_PROJECT_REQUEST, createProject);
 }
 
+export function* watchFetchProjects() {
+  yield takeLatest(types.FETCH_PROJECTS_REQUEST, fetchProjects);
+}
+
 export default function*() {
-  yield all([watchCreateProject()]);
+  yield all([watchCreateProject(), watchFetchProjects()]);
 }

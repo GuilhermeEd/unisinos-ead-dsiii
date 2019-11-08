@@ -22,6 +22,7 @@ const DateInput = ({ field, form, ...rest }) => {
       onChange={handleChange}
       value={field.value && moment(field.value)}
       format="DD/MM/YYYY"
+      placeholder="Data"
       {...rest}
     />
   );

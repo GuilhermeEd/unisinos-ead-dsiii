@@ -1,7 +1,7 @@
 import Template from '../template/Template';
 // import LoginPage from '../pages/LoginPage';
 import NewUserPage from '../pages/NewUserPage';
-import NewProjectPage from '../pages/NewProjectPage';
+import ManageProjects from '../pages/ManageProjects';
 import DonatePage from '../pages/DonatePage';
 
 export const adminPaths = [];
@@ -21,8 +21,8 @@ export const publicPaths = [
     default: true
   },
   {
-    name: '/new-project',
-    component: NewProjectPage,
+    name: '/manage-projects',
+    component: ManageProjects,
     template: Template
   },
   {

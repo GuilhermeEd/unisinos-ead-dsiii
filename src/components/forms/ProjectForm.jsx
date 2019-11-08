@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -21,7 +21,14 @@ import * as Styled from './styles/Form.styles';
 
 const MIN_DATE = moment().endOf('day');
 
-const ProjectForm = ({ handleSubmit }) => {
+const ProjectForm = ({ handleSubmit, resetForm, projectCreated, onSuccess }) => {
+  useEffect(() => {
+    if (projectCreated) {
+      resetForm();
+      onSuccess();
+    }
+  }, [projectCreated]);
+
   return (
     <Form onSubmit={handleSubmit}>
       <Styled.Group>
@@ -38,7 +45,6 @@ const ProjectForm = ({ handleSubmit }) => {
             name="data_inicio"
             label="Data de Início"
             component={DateInput}
-            placeholder="Data de Início"
             disabledDate={date => date < MIN_DATE}
           />
         </Styled.Item>
@@ -47,7 +53,6 @@ const ProjectForm = ({ handleSubmit }) => {
             name="data_fim"
             label="Data Fim"
             component={DateInput}
-            placeholder="Data Fim"
             disabledDate={date => date < MIN_DATE}
           />
         </Styled.Item>
@@ -68,7 +73,14 @@ const ProjectForm = ({ handleSubmit }) => {
 };
 
 ProjectForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired
+  resetForm: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func,
+  projectCreated: PropTypes.bool.isRequired
+};
+
+ProjectForm.defaultProps = {
+  onSuccess: () => null
 };
 
 const validationSchema = yup.object().shape({
@@ -87,7 +99,7 @@ const validationSchema = yup.object().shape({
   data_fim: yup.date().min(MIN_DATE.toISOString()),
   URL: yup.string().required(),
   encerrar_projeto_objetivo: yup.bool(),
-  descricao: yup.string()
+  descricao: yup.string().required()
 });
 
 const handleSubmit = (values, formikBag) => {
@@ -98,9 +110,13 @@ const handleSubmit = (values, formikBag) => {
   formikBag.props.createProject(payload);
 };
 
+const mapStateToProps = ({ projects }) => ({
+  projectCreated: projects.projectCreated
+});
+
 const enhance = compose(
   connect(
-    null,
+    mapStateToProps,
     { createProject }
   ),
   withFormik({

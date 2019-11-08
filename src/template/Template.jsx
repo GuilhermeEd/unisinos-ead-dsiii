@@ -15,8 +15,8 @@ const Template = ({ children, match }) => {
           <Menu.Item key="new-user">
             <Link to="/new-user">Criar Usuário</Link>
           </Menu.Item>
-          <Menu.Item key="new-project">
-            <Link to="/new-project">Criar Projeto</Link>
+          <Menu.Item key="manage-projects">
+            <Link to="/manage-projects">Projetos</Link>
           </Menu.Item>
           <Menu.Item key="donate">
             <Link to="/donate">Doar</Link>

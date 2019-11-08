@@ -13,3 +13,18 @@ export const createProjectFailure = error => ({
   type: types.CREATE_PROJECT_FAILURE,
   payload: error
 });
+
+export const fetchProjects = query => ({
+  type: types.FETCH_PROJECTS_REQUEST,
+  payload: query
+});
+
+export const fetchProjectsSuccess = projects => ({
+  type: types.FETCH_PROJECTS_SUCCESS,
+  payload: projects
+});
+
+export const fetchProjectsFailure = error => ({
+  type: types.FETCH_PROJECTS_FAILURE,
+  payload: error
+});
