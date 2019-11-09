@@ -23,5 +23,21 @@ export default createReducer(initialState, {
     ...state,
     loading: false,
     error: action.payload
+  }),
+  [types.GET_USER_REQUEST]: (state, action) => ({
+    ...state,
+    loading: true,
+    error: initialState.error
+  }),
+  [types.GET_USER_SUCCESS]: (state, action) => ({
+    ...state,
+    user: action.payload,
+    loading: false,
+    error: initialState.error
+  }),
+  [types.GET_USER_FAILURE]: (state, action) => ({
+    ...state,
+    loading: false,
+    error: action.payload
   })
 });

@@ -25,7 +25,7 @@ const ProjectList = ({ projects }) => {
     );
 
     return (
-      <List.Item extra={donateButton}>
+      <List.Item key={project.codigo} extra={donateButton}>
         <List.Item.Meta title={project.name} description={description} />
       </List.Item>
     );

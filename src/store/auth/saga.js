@@ -15,11 +15,25 @@ export function* login({ payload: credentials }) {
   }
 }
 
+export function* getUser({ payload: id }) {
+  try {
+    const user = yield call(services.getUser, id);
+    yield put(actions.getUserSuccess(user));
+  } catch (error) {
+    message.error(error.message);
+    yield put(actions.getUserFailure(error));
+  }
+}
+
 // Watchers
 export function* watchLogin() {
   yield takeLatest(types.LOGIN_REQUEST, login);
 }
 
+export function* watchGetUser() {
+  yield takeLatest(types.GET_USER_REQUEST, getUser);
+}
+
 export default function*() {
-  yield all([watchLogin()]);
+  yield all([watchLogin(), watchGetUser()]);
 }

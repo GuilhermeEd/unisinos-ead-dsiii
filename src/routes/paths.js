@@ -4,9 +4,37 @@ import NewUserPage from '../pages/NewUserPage';
 import ManageProjects from '../pages/ManageProjects';
 import DonatePage from '../pages/DonatePage';
 
-export const adminPaths = [];
+import { isAdmin, isDonator, isInstitution } from '../utils/permissions';
 
-export const privatePaths = [];
+export const adminPaths = [
+  {
+    name: '/manage-projects',
+    component: ManageProjects,
+    template: Template
+  }
+];
+
+export const institutionPaths = [
+  {
+    name: '/manage-projects',
+    component: ManageProjects,
+    template: Template
+  }
+];
+
+export const donatorPaths = [
+  {
+    name: '/donate',
+    component: DonatePage,
+    template: Template
+  }
+];
+
+export const privatePaths = [
+  ...(isAdmin() ? adminPaths : []),
+  ...(isInstitution() ? institutionPaths : []),
+  ...(isDonator() ? donatorPaths : [])
+];
 
 export const publicPaths = [
   // {
@@ -19,15 +47,5 @@ export const publicPaths = [
     component: NewUserPage,
     template: Template,
     default: true
-  },
-  {
-    name: '/manage-projects',
-    component: ManageProjects,
-    template: Template
-  },
-  {
-    name: '/donate',
-    component: DonatePage,
-    template: Template
   }
 ];

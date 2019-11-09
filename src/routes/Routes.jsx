@@ -8,14 +8,11 @@ import reverse from 'lodash/reverse';
 import LoginPage from '../pages/LoginPage';
 
 import TemplateRoute from './TemplateRoute';
-import { adminPaths, privatePaths, publicPaths } from './paths';
+import { privatePaths, publicPaths } from './paths';
 
 const Routes = ({ user }) => {
-  const loggedPaths =
-    user && user.role === 'admin' ? [...adminPaths, ...privatePaths] : privatePaths;
-
   const defaultPath = user
-    ? loggedPaths.find(path => !!path.default)
+    ? privatePaths.find(path => !!path.default)
     : publicPaths.find(path => !!path.default);
 
   const setRoute = path =>
@@ -49,7 +46,7 @@ const Routes = ({ user }) => {
   );
 
   const routesPrecedence = [
-    ...loggedPaths.map(setPrivateRoute),
+    ...privatePaths.map(setPrivateRoute),
     ...publicPaths.map(user ? setRedirect : setRoute)
   ];
 
