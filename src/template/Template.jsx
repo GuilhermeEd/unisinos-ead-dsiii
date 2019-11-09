@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu } from 'antd';
+import { useSelector } from 'react-redux';
+import { Menu, Avatar, Typography } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 
 import * as permissions from '../utils/permissions';
@@ -8,6 +9,7 @@ import * as permissions from '../utils/permissions';
 import * as Styled from './styles/Template.styles';
 
 const Template = ({ children, match }) => {
+  const { user } = useSelector(store => store.auth);
   const selectedKeys = [match.path.substr(1)];
 
   const isNewUser = permissions.isNewUser();
@@ -35,6 +37,12 @@ const Template = ({ children, match }) => {
             </Menu.Item>
           )}
         </Menu>
+        {user && (
+          <Styled.User>
+            <Typography.Text style={{ marginRight: '0.5rem' }}>{user.nome}</Typography.Text>
+            <Avatar icon="user" />
+          </Styled.User>
+        )}
       </Styled.Header>
       <Styled.Content>{children}</Styled.Content>
     </Styled.Container>
