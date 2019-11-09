@@ -41,14 +41,7 @@ const Routes = ({ user }) => {
       component: user ? path.component : LoginPage
     });
 
-  const setRedirect = path => (
-    <Redirect exact key={path.name} from={path.name} to={defaultPath ? defaultPath.name : '/'} />
-  );
-
-  const routesPrecedence = [
-    ...privatePaths.map(setPrivateRoute),
-    ...publicPaths.map(user ? setRedirect : setRoute)
-  ];
+  const routesPrecedence = [...privatePaths.map(setPrivateRoute), ...publicPaths.map(setRoute)];
 
   const routes = user ? routesPrecedence : reverse(routesPrecedence);
 

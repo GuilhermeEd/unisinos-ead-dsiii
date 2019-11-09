@@ -10,7 +10,8 @@ export const adminPaths = [
   {
     name: '/manage-projects',
     component: ManageProjects,
-    template: Template
+    template: Template,
+    default: true
   }
 ];
 

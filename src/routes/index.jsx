@@ -18,7 +18,7 @@ const Routes = () => {
     }
 
     dispatch(getUser(id));
-  });
+  }, []);
 
   return (
     <Router history={history}>

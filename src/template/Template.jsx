@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { Menu } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 
-import AdminPermission from '../components/permissions/AdminPermission';
-import DonatorPermission from '../components/permissions/DonatorPermission';
-import InstitutionPermission from '../components/permissions/InstitutionPermission';
+import { isAdmin, isInstitution, isDonator } from '../utils/permissions';
 
 import * as Styled from './styles/Template.styles';
 
@@ -19,21 +17,16 @@ const Template = ({ children, match }) => {
           <Menu.Item key="new-user">
             <Link to="/new-user">Criar Usuário</Link>
           </Menu.Item>
-          <AdminPermission>
+          {(isAdmin() || isInstitution()) && (
             <Menu.Item key="manage-projects">
               <Link to="/manage-projects">Projetos</Link>
             </Menu.Item>
-          </AdminPermission>
-          <InstitutionPermission>
-            <Menu.Item key="manage-projects">
-              <Link to="/manage-projects">Projetos</Link>
-            </Menu.Item>
-          </InstitutionPermission>
-          <DonatorPermission>
+          )}
+          {isDonator() && (
             <Menu.Item key="donate">
               <Link to="/donate">Doar</Link>
             </Menu.Item>
-          </DonatorPermission>
+          )}
         </Menu>
       </Styled.Header>
       <Styled.Content>{children}</Styled.Content>

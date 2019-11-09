@@ -9,5 +9,5 @@ export const getUser = id => {
     user: id
   };
 
-  return http.get('/getuser.php', { params }).then(res => res.data);
+  return http.get('/getuser.php', { params }).then(res => res.data[0]);
 };
