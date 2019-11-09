@@ -32,6 +32,7 @@ export function* deleteProject({ payload }) {
   try {
     yield call(services.deleteProject, payload);
     yield put(actions.deleteProjectSuccess());
+    yield put(actions.fetchProjects());
   } catch (error) {
     message.error(error.message);
     yield put(actions.deleteProjectFailure(error));
