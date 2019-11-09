@@ -28,3 +28,17 @@ export const fetchProjectsFailure = error => ({
   type: types.FETCH_PROJECTS_FAILURE,
   payload: error
 });
+
+export const deleteProject = id => ({
+  type: types.DELETE_PROJECT_REQUEST,
+  payload: id
+});
+
+export const deleteProjectSuccess = () => ({
+  type: types.DELETE_PROJECT_SUCCESS
+});
+
+export const deleteProjectFailure = error => ({
+  type: types.DELETE_PROJECT_FAILURE,
+  payload: error
+});

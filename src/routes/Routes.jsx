@@ -9,7 +9,10 @@ import LoginPage from '../pages/LoginPage';
 import { isAdmin, isDonator, isInstitution } from '../utils/permissions';
 
 import TemplateRoute from './TemplateRoute';
+import history from './history';
 import { adminPaths, institutionPaths, donatorPaths, publicPaths } from './paths';
+
+const withQuery = url => `${url}${history.location.search}`;
 
 const Routes = ({ user }) => {
   const privatePaths = useMemo(
@@ -55,7 +58,9 @@ const Routes = ({ user }) => {
 
   const routes = user ? routesPrecedence : reverse(routesPrecedence);
 
-  const notFoundRedirect = () => <Redirect to={defaultPath ? defaultPath.name : '/'} />;
+  const notFoundRedirect = () => (
+    <Redirect to={defaultPath ? withQuery(defaultPath.name) : withQuery('/')} />
+  );
 
   return (
     <Switch>

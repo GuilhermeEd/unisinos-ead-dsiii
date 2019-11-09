@@ -42,5 +42,20 @@ export default createReducer(initialState, {
     ...state,
     loading: false,
     error: action.payload
+  }),
+  [types.DELETE_PROJECT_REQUEST]: (state, action) => ({
+    ...state,
+    loading: true,
+    error: initialState.error
+  }),
+  [types.DELETE_PROJECT_SUCCESS]: (state, action) => ({
+    ...state,
+    loading: false,
+    error: initialState.error
+  }),
+  [types.DELETE_PROJECT_FAILURE]: (state, action) => ({
+    ...state,
+    loading: false,
+    error: action.payload
   })
 });

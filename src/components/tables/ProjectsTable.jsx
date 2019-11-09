@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Table, message } from 'antd';
 
-import { fetchProjects } from '../../store/projects/actions';
+import { fetchProjects, deleteProject } from '../../store/projects/actions';
 import ActionList from '../lists/ActionList';
 import CreateProjectButton from '../buttons/CreateProjectButton';
 
@@ -13,7 +13,7 @@ const ProjectsTable = () => {
   const renderActions = (text, record) => (
     <ActionList
       onEdit={() => message.warn('Função ainda não implementada')}
-      onDelete={() => message.warn('Função ainda não implementada')}
+      onDelete={() => dispatch(deleteProject(record.codigo))}
     />
   );
 

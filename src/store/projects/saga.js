@@ -28,6 +28,16 @@ export function* fetchProjects({ payload }) {
   }
 }
 
+export function* deleteProject({ payload }) {
+  try {
+    yield call(services.deleteProject, payload);
+    yield put(actions.deleteProjectSuccess());
+  } catch (error) {
+    message.error(error.message);
+    yield put(actions.deleteProjectFailure(error));
+  }
+}
+
 // Watchers
 export function* watchCreateProject() {
   yield takeLatest(types.CREATE_PROJECT_REQUEST, createProject);
@@ -37,6 +47,10 @@ export function* watchFetchProjects() {
   yield takeLatest(types.FETCH_PROJECTS_REQUEST, fetchProjects);
 }
 
+export function* watchDeleteProject() {
+  yield takeLatest(types.DELETE_PROJECT_REQUEST, deleteProject);
+}
+
 export default function*() {
-  yield all([watchCreateProject(), watchFetchProjects()]);
+  yield all([watchCreateProject(), watchFetchProjects(), watchDeleteProject()]);
 }
