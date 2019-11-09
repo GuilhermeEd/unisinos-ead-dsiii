@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -6,11 +6,21 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import reverse from 'lodash/reverse';
 
 import LoginPage from '../pages/LoginPage';
+import { isAdmin, isDonator, isInstitution } from '../utils/permissions';
 
 import TemplateRoute from './TemplateRoute';
-import { privatePaths, publicPaths } from './paths';
+import { adminPaths, institutionPaths, donatorPaths, publicPaths } from './paths';
 
 const Routes = ({ user }) => {
+  const privatePaths = useMemo(
+    () => [
+      ...(isAdmin() ? adminPaths : []),
+      ...(isInstitution() ? institutionPaths : []),
+      ...(isDonator() ? donatorPaths : [])
+    ],
+    [user]
+  );
+
   const defaultPath = user
     ? privatePaths.find(path => !!path.default)
     : publicPaths.find(path => !!path.default);

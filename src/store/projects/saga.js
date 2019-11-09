@@ -1,4 +1,4 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeLatest, select } from 'redux-saga/effects';
 import { message } from 'antd';
 
 import * as types from './types';
@@ -18,7 +18,9 @@ export function* createProject({ payload }) {
 
 export function* fetchProjects({ payload }) {
   try {
-    const projects = yield call(services.fetchProjects, payload);
+    const { user } = yield select(store => store.auth);
+    const query = { ...payload, user: user.codigo };
+    const projects = yield call(services.fetchProjects, query);
     yield put(actions.fetchProjectsSuccess(projects));
   } catch (error) {
     message.error(error.message);

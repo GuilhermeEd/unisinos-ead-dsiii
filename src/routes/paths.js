@@ -4,8 +4,6 @@ import NewUserPage from '../pages/NewUserPage';
 import ManageProjects from '../pages/ManageProjects';
 import DonatePage from '../pages/DonatePage';
 
-import { isAdmin, isDonator, isInstitution } from '../utils/permissions';
-
 export const adminPaths = [
   {
     name: '/manage-projects',
@@ -29,12 +27,6 @@ export const donatorPaths = [
     component: DonatePage,
     template: Template
   }
-];
-
-export const privatePaths = [
-  ...(isAdmin() ? adminPaths : []),
-  ...(isInstitution() ? institutionPaths : []),
-  ...(isDonator() ? donatorPaths : [])
 ];
 
 export const publicPaths = [
