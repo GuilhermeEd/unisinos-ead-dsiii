@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
-import reverse from 'lodash/reverse';
 
 import LoginPage from '../pages/LoginPage';
 import { isAdmin, isDonator, isInstitution } from '../utils/permissions';
@@ -25,8 +24,8 @@ const Routes = ({ user }) => {
   );
 
   const defaultPath = user
-    ? privatePaths.find(path => !!path.default)
-    : publicPaths.find(path => !!path.default);
+    ? privatePaths.find(path => !!path.default) || privatePaths[0]
+    : publicPaths.find(path => !!path.default) || publicPaths[0];
 
   const setRoute = path =>
     path.template ? (
@@ -54,9 +53,7 @@ const Routes = ({ user }) => {
       component: user ? path.component : LoginPage
     });
 
-  const routesPrecedence = [...privatePaths.map(setPrivateRoute), ...publicPaths.map(setRoute)];
-
-  const routes = user ? routesPrecedence : reverse(routesPrecedence);
+  const routes = user ? privatePaths.map(setPrivateRoute) : publicPaths.map(setRoute);
 
   const notFoundRedirect = () => (
     <Redirect to={defaultPath ? withQuery(defaultPath.name) : withQuery('/')} />

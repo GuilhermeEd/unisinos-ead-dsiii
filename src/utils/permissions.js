@@ -1,5 +1,10 @@
 import store from '../store';
 
+export const isNewUser = () => {
+  const { user } = store.getState().auth;
+  return user && user.tipo === 'N';
+};
+
 export const isAdmin = () => {
   const { user } = store.getState().auth;
   return user && user.tipo === 'A';
