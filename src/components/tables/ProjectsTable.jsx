@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Table, message } from 'antd';
 
 import { fetchProjects, deleteProject } from '../../store/projects/actions';
+import { isAdmin } from '../../utils/permissions';
 import ActionList from '../lists/ActionList';
 import CreateProjectButton from '../buttons/CreateProjectButton';
 
@@ -41,7 +42,7 @@ const ProjectsTable = () => {
       render: text => `R$ ${text}`
     },
     {
-      title: <CreateProjectButton />,
+      title: <CreateProjectButton disabled={isAdmin()} />,
       key: 'actions',
       render: renderActions
     }
