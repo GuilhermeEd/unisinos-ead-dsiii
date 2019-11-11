@@ -10,6 +10,7 @@ import { createProject, updateProject } from '../../store/projects/actions';
 
 import yup from '../../utils/yup';
 
+import AdminPermission from '../permissions/AdminPermission';
 import TextInput from '../inputs/TextInput';
 import MoneyInput from '../inputs/MoneyInput';
 import DateInput from '../inputs/DateInput';
@@ -68,12 +69,21 @@ const ProjectForm = ({
             <Field name="URL" label="Website" component={TextInput} placeholder="Website" />
           </Styled.Item>
         </Styled.Group>
-        <Field
-          hideLabel
-          name="encerrar_projeto_objetivo"
-          label="Encerrar projeto ao atingir o objetivo de arrecadação"
-          component={CheckboxInput}
-        />
+        <Styled.Group>
+          <Styled.Item>
+            <Field
+              hideLabel
+              name="encerrar_projeto_objetivo"
+              label="Encerrar projeto ao atingir o objetivo de arrecadação"
+              component={CheckboxInput}
+            />
+          </Styled.Item>
+          <AdminPermission>
+            <Styled.Item>
+              <Field hideLabel name="ativo" label="Ativo" component={CheckboxInput} />
+            </Styled.Item>
+          </AdminPermission>
+        </Styled.Group>
         <Field name="descricao" label="Descrição" component={DescriptionInput} />
         <SubmitButton />
       </Form>
@@ -107,11 +117,8 @@ const validationSchema = yup.object().shape({
     .number()
     .min(1)
     .required(),
-  data_inicio: yup
-    .date()
-    .min(MIN_DATE.toISOString())
-    .required(),
-  data_fim: yup.date().min(MIN_DATE.toISOString()),
+  data_inicio: yup.date().required(),
+  data_fim: yup.date(),
   URL: yup.string().required(),
   encerrar_projeto_objetivo: yup.bool(),
   descricao: yup.string().required()
@@ -119,9 +126,7 @@ const validationSchema = yup.object().shape({
 
 const handleSubmit = (values, formikBag) => {
   const payload = { ...values };
-  payload.codigo = 1;
-  payload.codigo_usuario = 1;
-  payload.ativo = 1;
+  payload.ativo = payload.ativo === undefined ? 1 : payload.ativo;
   if (formikBag.props.isEdit) {
     formikBag.props.updateProject(payload);
   } else {
