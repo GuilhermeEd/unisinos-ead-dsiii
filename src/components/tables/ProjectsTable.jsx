@@ -10,18 +10,24 @@ import ProjectForm from '../forms/ProjectForm';
 
 const ProjectsTable = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const { project, projects, loading } = useSelector(state => state.projects);
+  const { project, projects, loading, projectUpdated } = useSelector(state => state.projects);
   const dispatch = useDispatch();
 
-  const toggleEditModal = ({ codigo }) => {
+  const toggleEditModal = record => {
     const newModalState = !isEditModalOpen;
 
-    if (newModalState) {
-      dispatch(fetchProject(codigo));
+    if (newModalState && record) {
+      dispatch(fetchProject(record.codigo));
     }
 
     setIsEditModalOpen(newModalState);
   };
+
+  useEffect(() => {
+    if (projectUpdated) {
+      toggleEditModal();
+    }
+  }, [projectUpdated]);
 
   const renderActions = (text, record) => (
     <ActionList
@@ -68,7 +74,7 @@ const ProjectsTable = () => {
     <>
       <Table bordered columns={columns} dataSource={projects} loading={loading} rowKey="codigo" />
       <Modal visible={isEditModalOpen} onCancel={toggleEditModal} footer={null}>
-        <ProjectForm initialValues={project} loading={loading} />
+        <ProjectForm isEdit initialValues={project} loading={loading} />
       </Modal>
     </>
   );

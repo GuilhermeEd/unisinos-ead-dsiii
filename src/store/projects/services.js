@@ -37,5 +37,5 @@ export const fetchProject = query => {
     ...query
   };
 
-  return http.get('/editproject.php', { params }).then(res => res.data);
+  return http.get('/editproject.php', { params }).then(res => res.data[0]);
 };

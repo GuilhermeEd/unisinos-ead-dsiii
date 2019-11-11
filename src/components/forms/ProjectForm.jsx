@@ -6,7 +6,7 @@ import { Field, withFormik } from 'formik';
 import { Spin, Form } from 'antd';
 import moment from 'moment';
 
-import { createProject } from '../../store/projects/actions';
+import { createProject, updateProject } from '../../store/projects/actions';
 
 import yup from '../../utils/yup';
 
@@ -21,13 +21,20 @@ import * as Styled from './styles/Form.styles';
 
 const MIN_DATE = moment().endOf('day');
 
-const ProjectForm = ({ handleSubmit, resetForm, projectCreated, onSuccess, loading }) => {
+const ProjectForm = ({
+  handleSubmit,
+  resetForm,
+  projectCreated,
+  projectUpdated,
+  onSuccess,
+  loading
+}) => {
   useEffect(() => {
-    if (projectCreated) {
+    if (projectCreated || projectUpdated) {
       resetForm();
       onSuccess();
     }
-  }, [projectCreated]);
+  }, [projectCreated, projectUpdated]);
 
   return (
     <Spin spinning={loading}>
@@ -79,12 +86,16 @@ ProjectForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSuccess: PropTypes.func,
   projectCreated: PropTypes.bool.isRequired,
+  projectUpdated: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  isEdit: PropTypes.bool,
   loading: PropTypes.bool
 };
 
 ProjectForm.defaultProps = {
   onSuccess: () => null,
-  loading: false
+  loading: false,
+  isEdit: false
 };
 
 const validationSchema = yup.object().shape({
@@ -111,11 +122,16 @@ const handleSubmit = (values, formikBag) => {
   payload.codigo = 1;
   payload.codigo_usuario = 1;
   payload.ativo = 1;
-  formikBag.props.createProject(payload);
+  if (formikBag.props.isEdit) {
+    formikBag.props.updateProject(payload);
+  } else {
+    formikBag.props.createProject(payload);
+  }
 };
 
 const mapStateToProps = ({ projects }) => ({
-  projectCreated: projects.projectCreated
+  projectCreated: projects.projectCreated,
+  projectUpdated: projects.projectUpdated
 });
 
 const mapPropsToValues = props => {
@@ -125,7 +141,7 @@ const mapPropsToValues = props => {
 const enhance = compose(
   connect(
     mapStateToProps,
-    { createProject }
+    { createProject, updateProject }
   ),
   withFormik({
     enableReinitialize: true,
