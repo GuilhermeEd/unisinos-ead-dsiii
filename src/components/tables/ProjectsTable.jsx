@@ -1,20 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table, message } from 'antd';
+import { Table, Modal } from 'antd';
 
-import { fetchProjects, deleteProject } from '../../store/projects/actions';
+import { fetchProjects, deleteProject, fetchProject } from '../../store/projects/actions';
 import { isAdmin } from '../../utils/permissions';
 import ActionList from '../lists/ActionList';
 import CreateProjectButton from '../buttons/CreateProjectButton';
+import ProjectForm from '../forms/ProjectForm';
 
 const ProjectsTable = () => {
-  const { projects, loading } = useSelector(state => state.projects);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { project, projects, loading } = useSelector(state => state.projects);
   const dispatch = useDispatch();
+
+  const toggleEditModal = ({ codigo }) => {
+    const newModalState = !isEditModalOpen;
+
+    if (newModalState) {
+      dispatch(fetchProject(codigo));
+    }
+
+    setIsEditModalOpen(newModalState);
+  };
 
   const renderActions = (text, record) => (
     <ActionList
-      onEdit={() => message.warn('Função ainda não implementada')}
-      onDelete={() => dispatch(deleteProject(record.codigo))}
+      onEdit={() => toggleEditModal(record)}
+      onDelete={isAdmin() ? null : () => dispatch(deleteProject(record.codigo))}
     />
   );
 
@@ -53,7 +65,12 @@ const ProjectsTable = () => {
   }, [dispatch]);
 
   return (
-    <Table bordered columns={columns} dataSource={projects} loading={loading} rowKey="codigo" />
+    <>
+      <Table bordered columns={columns} dataSource={projects} loading={loading} rowKey="codigo" />
+      <Modal visible={isEditModalOpen} onCancel={toggleEditModal} footer={null}>
+        <ProjectForm initialValues={project} loading={loading} />
+      </Modal>
+    </>
   );
 };
 

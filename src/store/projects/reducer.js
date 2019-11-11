@@ -4,6 +4,7 @@ import * as types from './types';
 const initialState = {
   projects: [],
   projectCreated: false,
+  projectUpdated: false,
   loading: false,
   error: null
 };
@@ -54,6 +55,40 @@ export default createReducer(initialState, {
     error: initialState.error
   }),
   [types.DELETE_PROJECT_FAILURE]: (state, action) => ({
+    ...state,
+    loading: false,
+    error: action.payload
+  }),
+  [types.UPDATE_PROJECT_REQUEST]: (state, action) => ({
+    ...state,
+    projectUpdated: initialState.projectUpdated,
+    loading: true,
+    error: initialState.error
+  }),
+  [types.UPDATE_PROJECT_SUCCESS]: (state, action) => ({
+    ...state,
+    projectUpdated: true,
+    loading: false,
+    error: initialState.error
+  }),
+  [types.UPDATE_PROJECT_FAILURE]: (state, action) => ({
+    ...state,
+    projectUpdated: false,
+    loading: false,
+    error: action.payload
+  }),
+  [types.FETCH_PROJECT_REQUEST]: (state, action) => ({
+    ...state,
+    loading: true,
+    error: initialState.error
+  }),
+  [types.FETCH_PROJECT_SUCCESS]: (state, action) => ({
+    ...state,
+    project: action.payload,
+    loading: false,
+    error: initialState.error
+  }),
+  [types.FETCH_PROJECT_FAILURE]: (state, action) => ({
     ...state,
     loading: false,
     error: action.payload

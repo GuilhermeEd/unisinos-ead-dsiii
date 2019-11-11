@@ -42,3 +42,32 @@ export const deleteProjectFailure = error => ({
   type: types.DELETE_PROJECT_FAILURE,
   payload: error
 });
+
+export const updateProject = payload => ({
+  type: types.UPDATE_PROJECT_REQUEST,
+  payload
+});
+
+export const updateProjectSuccess = () => ({
+  type: types.UPDATE_PROJECT_SUCCESS
+});
+
+export const updateProjectFailure = error => ({
+  type: types.UPDATE_PROJECT_FAILURE,
+  payload: error
+});
+
+export const fetchProject = query => ({
+  type: types.FETCH_PROJECT_REQUEST,
+  payload: query
+});
+
+export const fetchProjectSuccess = project => ({
+  type: types.FETCH_PROJECT_SUCCESS,
+  payload: project
+});
+
+export const fetchProjectFailure = error => ({
+  type: types.FETCH_PROJECT_FAILURE,
+  payload: error
+});
