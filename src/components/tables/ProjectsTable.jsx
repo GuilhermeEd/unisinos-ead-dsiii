@@ -26,7 +26,7 @@ const ProjectsTable = () => {
   const renderActions = (text, record) => (
     <ActionList
       onEdit={() => toggleEditModal(record)}
-      onDelete={isAdmin() ? null : () => dispatch(deleteProject(record.codigo))}
+      onDelete={isAdmin() ? () => dispatch(deleteProject(record.codigo)) : null}
     />
   );
 
