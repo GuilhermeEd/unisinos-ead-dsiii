@@ -42,7 +42,7 @@ const ProjectForm = ({
       <Form onSubmit={handleSubmit}>
         <Styled.Group>
           <Styled.Item flex={3}>
-            <Field name="nome" label="Nome" component={TextInput} />
+            <Field name="nome" label="Nome" component={TextInput} autoFocus />
           </Styled.Item>
           <Styled.Item flex={1}>
             <Field name="objetivo_arrecadacao" label="Objetivo" component={MoneyInput} />
@@ -140,7 +140,7 @@ const mapStateToProps = ({ projects }) => ({
 });
 
 const mapPropsToValues = props => {
-  return props.initialValues;
+  return props.initialValues || {};
 };
 
 const enhance = compose(

@@ -7,17 +7,17 @@ import withValidation from '../hocs/withValidation';
 
 const DateInput = ({ field, form, ...rest }) => {
   const handleChange = value => {
-    if (!value) {
+    if (value === undefined) {
       return;
     }
 
-    form.setFieldValue(field.name, value.toISOString());
+    form.setFieldValue(field.name, value ? value.toISOString() : undefined);
   };
 
   return (
     <DatePicker
-      allowClear
       {...field}
+      allowClear
       style={{ width: '100%' }}
       onChange={handleChange}
       value={field.value && moment(field.value)}
