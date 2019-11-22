@@ -4,7 +4,7 @@ import ProjectsTable from '../components/tables/ProjectsTable';
 
 import * as Styled from './styles/Page.styles';
 
-const ManageProjects = () => {
+const ManageProjectsPage = () => {
   return (
     <Styled.Page>
       <ProjectsTable />
@@ -12,4 +12,4 @@ const ManageProjects = () => {
   );
 };
 
-export default ManageProjects;
+export default ManageProjectsPage;

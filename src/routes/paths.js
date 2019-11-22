@@ -1,22 +1,28 @@
 import Template from '../template/Template';
 // import LoginPage from '../pages/LoginPage';
 import NewUserPage from '../pages/NewUserPage';
-import ManageProjects from '../pages/ManageProjects';
+import ManageProjectsPage from '../pages/ManageProjectsPage';
+import ManageUsersPage from '../pages/ManageUsersPage';
 import DonatePage from '../pages/DonatePage';
 
 export const adminPaths = [
   {
     name: '/manage-projects',
-    component: ManageProjects,
+    component: ManageProjectsPage,
     template: Template,
     default: true
+  },
+  {
+    name: '/manage-users',
+    component: ManageUsersPage,
+    template: Template
   }
 ];
 
 export const institutionPaths = [
   {
     name: '/manage-projects',
-    component: ManageProjects,
+    component: ManageProjectsPage,
     template: Template
   }
 ];

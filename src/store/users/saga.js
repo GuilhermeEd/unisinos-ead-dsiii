@@ -1,5 +1,6 @@
 import { all, call, put, takeLatest, select } from 'redux-saga/effects';
 import { message } from 'antd';
+import history from '../../routes/history';
 
 import * as types from './types';
 import * as actions from './actions';
@@ -9,6 +10,7 @@ export function* createUser({ payload }) {
   try {
     yield call(services.createUser, payload);
     message.success('Usuário criado com sucesso!');
+    history.replace('/');
     yield put(actions.createUserSuccess());
   } catch (error) {
     message.error(error.message);
@@ -44,8 +46,7 @@ export function* updateUser({ payload: query }) {
 
 export function* fetchUser({ payload: id }) {
   try {
-    const { user } = yield select(store => store.auth);
-    const query = { codigo: id, codigo_usuario: user.codigo };
+    const query = { codigo_usuario: id };
     const users = yield call(services.fetchUser, query);
     yield put(actions.fetchUserSuccess(users));
   } catch (error) {

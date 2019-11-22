@@ -9,7 +9,7 @@ export const fetchUsers = query => {
     ...query
   };
 
-  return http.get('/listuser.php', { params }).then(res => res.data);
+  return http.get('/listusers.php', { params }).then(res => res.data);
 };
 
 export const updateUser = payload => {

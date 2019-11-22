@@ -31,6 +31,11 @@ const Template = ({ children, match }) => {
               <Link to="/manage-projects">Projetos</Link>
             </Menu.Item>
           )}
+          {isAdmin && (
+            <Menu.Item key="manage-users">
+              <Link to="/manage-users">Usuários</Link>
+            </Menu.Item>
+          )}
           {isDonator && (
             <Menu.Item key="donate">
               <Link to="/donate">Doar</Link>

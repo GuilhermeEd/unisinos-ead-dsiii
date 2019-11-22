@@ -6,7 +6,7 @@ import { Field, withFormik } from 'formik';
 import { Spin, Form } from 'antd';
 import moment from 'moment';
 
-import { createUser } from '../../store/users/actions';
+import { createUser, updateUser } from '../../store/users/actions';
 
 import yup from '../../utils/yup';
 import PasswordInput from '../inputs/PasswordInput';
@@ -15,6 +15,8 @@ import DateInput from '../inputs/DateInput';
 import CEPInput from '../inputs/CEPInput';
 import UFInput from '../inputs/UFInput';
 import PaymentMethodInput from '../inputs/PaymentMethodInput';
+import AdminPermission from '../permissions/AdminPermission';
+import CheckboxInput from '../inputs/CheckboxInput';
 import SubmitButton from '../buttons/SubmitButton';
 
 import * as Styled from './styles/Form.styles';
@@ -80,6 +82,13 @@ const DonatorForm = ({ handleSubmit, loading }) => {
             />
           </Styled.Item>
         </Styled.Group>
+        <AdminPermission>
+          <Styled.Group>
+            <Styled.Item>
+              <Field hideLabel name="ativo" label="Ativo" component={CheckboxInput} />
+            </Styled.Item>
+          </Styled.Group>
+        </AdminPermission>
         <SubmitButton />
       </Form>
     </Spin>
@@ -128,14 +137,23 @@ const validationSchema = yup.object().shape({
   cidade: yup.string().required(),
   bairro: yup.string().required(),
   telefone: yup.string().required(),
-  pref_doacao: yup.number().required()
+  pref_doacao: yup.number().required(),
+  ativo: yup.number()
 });
+
+const mapPropsToValues = props => {
+  return props.initialValues || {};
+};
 
 const handleSubmit = (values, formikBag) => {
   const payload = { ...values };
   payload.ativo = payload.ativo === undefined ? 1 : payload.ativo;
-  payload.tipo = 2;
-  formikBag.props.createUser(payload);
+  payload.tipo = 'D';
+  if (formikBag.props.isEdit) {
+    formikBag.props.updateUser(payload);
+  } else {
+    formikBag.props.createUser(payload);
+  }
 };
 
 const mapStateToProps = ({ users }) => ({
@@ -145,11 +163,12 @@ const mapStateToProps = ({ users }) => ({
 const enhance = compose(
   connect(
     mapStateToProps,
-    { createUser }
+    { createUser, updateUser }
   ),
   withFormik({
     enableReinitialize: true,
     validationSchema,
+    mapPropsToValues,
     handleSubmit
   })
 );
