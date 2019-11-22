@@ -53,7 +53,7 @@ export function* updateProject({ payload: query }) {
     yield put(actions.fetchProjects());
   } catch (error) {
     message.error(error.message);
-    yield put(actions.deleteProjectFailure(error));
+    yield put(actions.updateProjectSuccess(error));
   }
 }
 
