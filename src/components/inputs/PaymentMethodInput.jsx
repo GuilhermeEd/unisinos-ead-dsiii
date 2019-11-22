@@ -4,12 +4,16 @@ import { Radio } from 'antd';
 
 import withValidation from '../hocs/withValidation';
 
-const paymentMethods = ['Boleto', 'Cartão de Crédito', 'Transferência Bancária'];
+const paymentMethods = [
+  { key: 1, label: 'Boleto' },
+  { key: 2, label: 'Transferência Bancária' },
+  { key: 3, label: 'Cartão de Crédito' }
+];
 
 const PaymentMethodInput = ({ field, form, ...rest }) => {
   const options = paymentMethods.map(paymentMethod => (
-    <Radio key={paymentMethod} value={paymentMethod}>
-      {paymentMethod}
+    <Radio key={paymentMethod.key} value={paymentMethod.key}>
+      {paymentMethod.label}
     </Radio>
   ));
 

@@ -1,131 +1,140 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { Field, withFormik } from 'formik';
-import { Form } from 'antd';
+import { Spin, Form } from 'antd';
 import moment from 'moment';
 
+import { createUser } from '../../store/users/actions';
+
 import yup from '../../utils/yup';
-import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
 import TextInput from '../inputs/TextInput';
 import DateInput from '../inputs/DateInput';
 import SubmitButton from '../buttons/SubmitButton';
 import CEPInput from '../inputs/CEPInput';
 import UFInput from '../inputs/UFInput';
+import PaymentMethodInput from '../inputs/PaymentMethodInput';
 
 import * as Styled from './styles/Form.styles';
 
 const MAX_FOUNDATION_DATE = moment().startOf('day');
 
-const InstitutionForm = ({ handleSubmit }) => {
+const InstitutionForm = ({ handleSubmit, loading }) => {
   return (
-    <Form onSubmit={handleSubmit}>
-      <Field name="email" label="Email" component={EmailInput} />
-      <Styled.Group>
-        <Styled.Item flex={1}>
-          <Field name="password" label="Senha" component={PasswordInput} />
-        </Styled.Item>
-        <Styled.Item flex={1}>
-          <Field name="passwordConfirmation" label="Confirmar Senha" component={PasswordInput} />
-        </Styled.Item>
-      </Styled.Group>
-      <Styled.Group>
-        <Styled.Item flex={5}>
-          <Field
-            name="name"
-            label="Razão Social"
-            component={TextInput}
-            placeholder="Razão Social"
-          />
-        </Styled.Item>
-        <Styled.Item flex={3}>
-          <Field
-            name="cnpj"
-            label="CNPJ"
-            component={TextInput}
-            placeholder="CNPJ (somente números)"
-          />
-        </Styled.Item>
-        <Styled.Item flex={2}>
-          <Field
-            name="foundation"
-            label="Data de Fundação"
-            component={DateInput}
-            placeholder="Data de Fundação"
-            disabledDate={date => date > MAX_FOUNDATION_DATE}
-          />
-        </Styled.Item>
-      </Styled.Group>
-      <Styled.Group>
-        <Styled.Item flex={3}>
-          <Field name="cep" label="CEP" component={CEPInput} placeholder="CEP" />
-        </Styled.Item>
-        <Styled.Item flex={1}>
-          <Field name="uf" label="UF" component={UFInput} placeholder="UF" />
-        </Styled.Item>
-        <Styled.Item flex={4}>
-          <Field name="city" label="Cidade" component={TextInput} placeholder="Cidade" />
-        </Styled.Item>
-        <Styled.Item flex={3}>
-          <Field name="neighborhood" label="Bairro" component={TextInput} placeholder="Bairro" />
-        </Styled.Item>
-      </Styled.Group>
-      <Styled.Group>
-        <Styled.Item flex={1}>
-          <Field name="phone" label="Telefone" component={TextInput} placeholder="Telefone" />
-        </Styled.Item>
-        <Styled.Item flex={3}>
-          <Field name="website" label="Website" component={TextInput} placeholder="Website" />
-        </Styled.Item>
-      </Styled.Group>
-      <Styled.Group>
-        <Styled.Item flex={4}>
-          <Field name="bank" label="Banco" component={TextInput} placeholder="Banco" />
-        </Styled.Item>
-        <Styled.Item flex={1}>
-          <Field name="agency" label="Agência" component={TextInput} placeholder="Agência" />
-        </Styled.Item>
-        <Styled.Item flex={2}>
-          <Field
-            name="account"
-            label="Conta Corrente"
-            component={TextInput}
-            placeholder="Conta Corrente"
-          />
-        </Styled.Item>
-      </Styled.Group>
-      <SubmitButton />
-    </Form>
+    <Spin spinning={loading}>
+      <Form onSubmit={handleSubmit}>
+        <Field name="nome" label="Razão Social" component={TextInput} placeholder="Razão Social" />
+        <Styled.Group>
+          <Styled.Item flex={1}>
+            <Field name="senha" label="Senha" component={PasswordInput} />
+          </Styled.Item>
+          <Styled.Item flex={1}>
+            <Field name="senhaConfirmation" label="Confirmar Senha" component={PasswordInput} />
+          </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
+          <Styled.Item flex={3}>
+            <Field
+              name="cpf_cnpj"
+              label="CNPJ"
+              component={TextInput}
+              placeholder="CNPJ (somente números)"
+            />
+          </Styled.Item>
+          <Styled.Item flex={2}>
+            <Field
+              name="data"
+              label="Data de Fundação"
+              component={DateInput}
+              placeholder="Data de Fundação"
+              disabledDate={date => date > MAX_FOUNDATION_DATE}
+            />
+          </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
+          <Styled.Item flex={3}>
+            <Field name="cep" label="CEP" component={CEPInput} placeholder="CEP" />
+          </Styled.Item>
+          <Styled.Item flex={1}>
+            <Field name="uf" label="UF" component={UFInput} placeholder="UF" />
+          </Styled.Item>
+          <Styled.Item flex={4}>
+            <Field name="cidade" label="Cidade" component={TextInput} placeholder="Cidade" />
+          </Styled.Item>
+          <Styled.Item flex={3}>
+            <Field name="bairro" label="Bairro" component={TextInput} placeholder="Bairro" />
+          </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
+          <Styled.Item flex={1}>
+            <Field name="telefone" label="Telefone" component={TextInput} placeholder="Telefone" />
+          </Styled.Item>
+          <Styled.Item flex={3}>
+            <Field name="url" label="Website" component={TextInput} placeholder="Website" />
+          </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
+          <Styled.Item flex={4}>
+            <Field name="banco" label="Banco" component={TextInput} placeholder="Banco" />
+          </Styled.Item>
+          <Styled.Item flex={1}>
+            <Field name="agencia" label="Agência" component={TextInput} placeholder="Agência" />
+          </Styled.Item>
+          <Styled.Item flex={2}>
+            <Field
+              name="conta"
+              label="Conta Corrente"
+              component={TextInput}
+              placeholder="Conta Corrente"
+            />
+          </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
+          <Styled.Item flex={1}>
+            <Field
+              name="pref_doacao"
+              label="Preferência para doação"
+              component={PaymentMethodInput}
+              placeholder="Preferência para doação"
+            />
+          </Styled.Item>
+        </Styled.Group>
+        <SubmitButton />
+      </Form>
+    </Spin>
   );
 };
 
 InstitutionForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  loading: PropTypes.bool
+};
+
+InstitutionForm.defaultProps = {
+  loading: false
 };
 
 const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required(),
-  password: yup
+  senha: yup
     .string()
     .min(6)
     .required(),
-  passwordConfirmation: yup
+  senhaConfirmation: yup
     .string()
     .min(6)
-    .equals(yup.ref('password'), 'Senhas não conferem')
+    .equals(yup.ref('senha'), 'Senhas não conferem')
     .required(),
-  name: yup
+  nome: yup
     .string()
     .min(3)
     .required(),
-  cnpj: yup
+  cpf_cnpj: yup
     .string()
     .length(14)
     .required(),
-  foundation: yup
+  data: yup
     .date()
     .max(MAX_FOUNDATION_DATE.toISOString())
     .required(),
@@ -137,15 +146,37 @@ const validationSchema = yup.object().shape({
     .string()
     .length(2)
     .required(),
-  city: yup.string().required(),
-  neighborhood: yup.string().required(),
-  phone: yup.string().required(),
-  website: yup.string().required(),
-  bank: yup.string().required(),
-  agency: yup.string().required(),
-  account: yup.string().required()
+  cidade: yup.string().required(),
+  bairro: yup.string().required(),
+  telefone: yup.string().required(),
+  url: yup.string().required(),
+  banco: yup.string().required(),
+  agencia: yup.string().required(),
+  conta: yup.string().required(),
+  pref_doacao: yup.number().required()
 });
 
-export default withFormik({
-  validationSchema
-})(InstitutionForm);
+const handleSubmit = (values, formikBag) => {
+  const payload = { ...values };
+  payload.ativo = payload.ativo === undefined ? 1 : payload.ativo;
+  payload.tipo = 1;
+  formikBag.props.createUser(payload);
+};
+
+const mapStateToProps = ({ users }) => ({
+  loading: users.loading
+});
+
+const enhance = compose(
+  connect(
+    mapStateToProps,
+    { createUser }
+  ),
+  withFormik({
+    enableReinitialize: true,
+    validationSchema,
+    handleSubmit
+  })
+);
+
+export default enhance(InstitutionForm);

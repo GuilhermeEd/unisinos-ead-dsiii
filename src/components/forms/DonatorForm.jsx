@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { Field, withFormik } from 'formik';
-import { Form } from 'antd';
+import { Spin, Form } from 'antd';
 import moment from 'moment';
 
+import { createUser } from '../../store/users/actions';
+
 import yup from '../../utils/yup';
-import EmailInput from '../inputs/EmailInput';
 import PasswordInput from '../inputs/PasswordInput';
 import TextInput from '../inputs/TextInput';
 import DateInput from '../inputs/DateInput';
@@ -18,94 +21,99 @@ import * as Styled from './styles/Form.styles';
 
 const MAX_BIRTHDAY_DATE = moment().startOf('day');
 
-const DonatorForm = ({ handleSubmit }) => {
+const DonatorForm = ({ handleSubmit, loading }) => {
   return (
-    <Form onSubmit={handleSubmit}>
-      <Field name="email" label="Email" component={EmailInput} />
-      <Styled.Group>
-        <Styled.Item flex={1}>
-          <Field name="password" label="Senha" component={PasswordInput} />
-        </Styled.Item>
-        <Styled.Item flex={1}>
-          <Field name="passwordConfirmation" label="Confirmar Senha" component={PasswordInput} />
-        </Styled.Item>
-      </Styled.Group>
-      <Styled.Group>
-        <Styled.Item flex={5}>
-          <Field name="name" label="Nome" component={TextInput} placeholder="Nome" />
-        </Styled.Item>
-        <Styled.Item flex={3}>
-          <Field name="cpf" label="CPF" component={TextInput} placeholder="CPF (somente números)" />
-        </Styled.Item>
-        <Styled.Item flex={2}>
-          <Field
-            name="birthday"
-            label="Data de Nascimento"
-            component={DateInput}
-            placeholder="Data de Nascimento"
-            disabledDate={date => date > MAX_BIRTHDAY_DATE}
-          />
-        </Styled.Item>
-      </Styled.Group>
-      <Styled.Group>
-        <Styled.Item flex={3}>
-          <Field name="cep" label="CEP" component={CEPInput} placeholder="CEP" />
-        </Styled.Item>
-        <Styled.Item flex={1}>
-          <Field name="uf" label="UF" component={UFInput} placeholder="UF" />
-        </Styled.Item>
-        <Styled.Item flex={4}>
-          <Field name="city" label="Cidade" component={TextInput} placeholder="Cidade" />
-        </Styled.Item>
-        <Styled.Item flex={3}>
-          <Field name="neighborhood" label="Bairro" component={TextInput} placeholder="Bairro" />
-        </Styled.Item>
-      </Styled.Group>
-      <Styled.Group>
-        <Styled.Item>
-          <Field name="phone" label="Telefone" component={TextInput} placeholder="Telefone" />
-        </Styled.Item>
-        <Styled.Item flex={1}>
-          <Field
-            name="paymentMethod"
-            label="Preferência para doação"
-            component={PaymentMethodInput}
-            placeholder="Preferência para doação"
-          />
-        </Styled.Item>
-      </Styled.Group>
-      <SubmitButton />
-    </Form>
+    <Spin spinning={loading}>
+      <Form onSubmit={handleSubmit}>
+        <Field name="nome" label="Nome" component={TextInput} placeholder="Nome" />
+        <Styled.Group>
+          <Styled.Item flex={1}>
+            <Field name="senha" label="Senha" component={PasswordInput} />
+          </Styled.Item>
+          <Styled.Item flex={1}>
+            <Field name="senhaConfirmation" label="Confirmar Senha" component={PasswordInput} />
+          </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
+          <Styled.Item flex={3}>
+            <Field
+              name="cpf_cnpj"
+              label="CPF"
+              component={TextInput}
+              placeholder="CPF (somente números)"
+            />
+          </Styled.Item>
+          <Styled.Item flex={2}>
+            <Field
+              name="data"
+              label="Data de Nascimento"
+              component={DateInput}
+              placeholder="Data de Nascimento"
+              disabledDate={date => date > MAX_BIRTHDAY_DATE}
+            />
+          </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
+          <Styled.Item flex={3}>
+            <Field name="cep" label="CEP" component={CEPInput} placeholder="CEP" />
+          </Styled.Item>
+          <Styled.Item flex={1}>
+            <Field name="uf" label="UF" component={UFInput} placeholder="UF" />
+          </Styled.Item>
+          <Styled.Item flex={4}>
+            <Field name="cidade" label="Cidade" component={TextInput} placeholder="Cidade" />
+          </Styled.Item>
+          <Styled.Item flex={3}>
+            <Field name="bairro" label="Bairro" component={TextInput} placeholder="Bairro" />
+          </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
+          <Styled.Item>
+            <Field name="telefone" label="Telefone" component={TextInput} placeholder="Telefone" />
+          </Styled.Item>
+          <Styled.Item flex={1}>
+            <Field
+              name="pref_doacao"
+              label="Preferência para doação"
+              component={PaymentMethodInput}
+              placeholder="Preferência para doação"
+            />
+          </Styled.Item>
+        </Styled.Group>
+        <SubmitButton />
+      </Form>
+    </Spin>
   );
 };
 
 DonatorForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  loading: PropTypes.bool
+};
+
+DonatorForm.defaultProps = {
+  loading: false
 };
 
 const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required(),
-  password: yup
+  senha: yup
     .string()
     .min(6)
     .required(),
-  passwordConfirmation: yup
+  senhaConfirmation: yup
     .string()
     .min(6)
-    .equals(yup.ref('password'), 'Senhas não conferem')
+    .equals(yup.ref('senha'), 'Senhas não conferem')
     .required(),
-  name: yup
+  nome: yup
     .string()
     .min(3)
     .required(),
-  cpf: yup
+  cpf_cnpj: yup
     .string()
     .length(12)
     .required(),
-  birthday: yup
+  data: yup
     .date()
     .max(MAX_BIRTHDAY_DATE.toISOString())
     .required(),
@@ -117,12 +125,33 @@ const validationSchema = yup.object().shape({
     .string()
     .length(2)
     .required(),
-  city: yup.string().required(),
-  neighborhood: yup.string().required(),
-  phone: yup.string().required(),
-  paymentMethod: yup.string().required()
+  cidade: yup.string().required(),
+  bairro: yup.string().required(),
+  telefone: yup.string().required(),
+  pref_doacao: yup.number().required()
 });
 
-export default withFormik({
-  validationSchema
-})(DonatorForm);
+const handleSubmit = (values, formikBag) => {
+  const payload = { ...values };
+  payload.ativo = payload.ativo === undefined ? 1 : payload.ativo;
+  payload.tipo = 2;
+  formikBag.props.createUser(payload);
+};
+
+const mapStateToProps = ({ users }) => ({
+  loading: users.loading
+});
+
+const enhance = compose(
+  connect(
+    mapStateToProps,
+    { createUser }
+  ),
+  withFormik({
+    enableReinitialize: true,
+    validationSchema,
+    handleSubmit
+  })
+);
+
+export default enhance(DonatorForm);
