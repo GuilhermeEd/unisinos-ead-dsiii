@@ -36,7 +36,7 @@ const UsersTable = () => {
 
   const columns = [
     {
-      title: 'Nome',
+      title: 'Nome / Razão Social',
       dataIndex: 'nome',
       key: 'nome'
     },
@@ -44,6 +44,12 @@ const UsersTable = () => {
       title: 'Tipo',
       dataIndex: 'tipo',
       key: 'tipo'
+    },
+    {
+      title: 'Ativo',
+      dataIndex: 'ativo',
+      key: 'ativo',
+      render: ativo => (ativo ? 'Sim' : 'Não')
     },
     {
       title: 'Editar',
