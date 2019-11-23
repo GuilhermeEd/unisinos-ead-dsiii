@@ -20,7 +20,11 @@ const ProjectList = () => {
     const title = (
       <Styled.ItemTitle>
         <Typography.Title level={4}>{project.nome}</Typography.Title>
-        {project.URL && <a href={project.URL}>visitar site</a>}
+        {project.URL && (
+          <a href={project.URL} target="__blank">
+            visitar site
+          </a>
+        )}
       </Styled.ItemTitle>
     );
 
