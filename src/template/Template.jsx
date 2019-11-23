@@ -8,6 +8,13 @@ import * as permissions from '../utils/permissions';
 
 import * as Styled from './styles/Template.styles';
 
+const getUserTypeName = type =>
+  ({
+    I: 'Instituição',
+    D: 'Doador',
+    A: 'Administrador'
+  }[type]);
+
 const Template = ({ children, match }) => {
   const { user } = useSelector(store => store.auth);
   const selectedKeys = [match.path.substr(1)];
@@ -44,8 +51,15 @@ const Template = ({ children, match }) => {
         </Menu>
         {user && (
           <Styled.User>
-            <Typography.Text style={{ marginRight: '0.5rem' }}>{user.nome}</Typography.Text>
-            <Avatar icon="user" />
+            <Styled.UserInfo>
+              <Typography.Text>{user.nome}</Typography.Text>
+              <Typography.Text type="secondary" style={{ fontSize: '90%' }}>
+                {user && getUserTypeName(user.tipo)}
+              </Typography.Text>
+            </Styled.UserInfo>
+            <Styled.UserAvatar>
+              <Avatar icon="user" />
+            </Styled.UserAvatar>
           </Styled.User>
         )}
       </Styled.Header>

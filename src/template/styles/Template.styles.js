@@ -14,7 +14,17 @@ export const Header = styled.header`
   padding: 0 1rem;
 `;
 
-export const User = styled.div``;
+export const User = styled.div`
+  display: flex;
+`;
+
+export const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-right: 0.5rem;
+`;
+
+export const UserAvatar = styled.div``;
 
 export const Content = styled.section`
   flex: 1;
