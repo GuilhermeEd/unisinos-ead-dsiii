@@ -55,6 +55,10 @@ const validationSchema = yup.object().shape({
     .required()
 });
 
+const mapPropsToValues = props => {
+  return props.initialValues || {};
+};
+
 const handleSubmit = (values, formikBag) => {
   const payload = {
     valor: values.valor,
@@ -71,6 +75,8 @@ const enhance = compose(
   ),
   withFormik({
     validationSchema,
+    enableReinitialize: true,
+    mapPropsToValues,
     handleSubmit
   })
 );

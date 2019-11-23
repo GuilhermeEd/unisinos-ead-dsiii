@@ -7,6 +7,7 @@ import DonateForm from '../forms/DonateForm';
 const DonateButton = ({ disabled, project }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { donationCreated } = useSelector(state => state.donations);
+  const { user } = useSelector(state => state.auth);
 
   const toggleModal = () => setIsModalVisible(!isModalVisible);
 
@@ -29,7 +30,10 @@ const DonateButton = ({ disabled, project }) => {
         onCancel={toggleModal}
         footer={null}
       >
-        <DonateForm projeto={project} />
+        <DonateForm
+          projeto={project}
+          initialValues={{ metodo_doacao: user ? user.metodo_doacao : undefined }}
+        />
       </Modal>
     </>
   );
