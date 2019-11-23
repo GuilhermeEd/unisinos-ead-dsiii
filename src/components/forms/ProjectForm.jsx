@@ -118,7 +118,7 @@ const validationSchema = yup.object().shape({
     .min(1)
     .required(),
   data_inicio: yup.date().required(),
-  data_fim: yup.date(),
+  data_fim: yup.date().nullable(),
   URL: yup.string().required(),
   encerrar_projeto_objetivo: yup.bool(),
   descricao: yup.string().required()

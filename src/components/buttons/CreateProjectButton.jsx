@@ -6,15 +6,17 @@ import ProjectForm from '../forms/ProjectForm';
 const CreateProjectButton = ({ disabled }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const toggleModal = () => setIsModalVisible(!isModalVisible);
+  const openModal = () => setIsModalVisible(true);
+
+  const closeModal = () => setIsModalVisible(false);
 
   return (
     <>
-      <Button block type="primary" onClick={toggleModal} disabled={disabled}>
+      <Button block type="primary" onClick={openModal} disabled={disabled}>
         Criar Projeto
       </Button>
-      <Modal visible={isModalVisible} footer={null} onCancel={toggleModal}>
-        <ProjectForm onSuccess={toggleModal} />
+      <Modal visible={isModalVisible} footer={null} onCancel={closeModal}>
+        <ProjectForm onSuccess={closeModal} />
       </Modal>
     </>
   );

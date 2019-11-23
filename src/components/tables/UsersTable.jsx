@@ -12,14 +12,12 @@ const UsersTable = () => {
   const { user, users, loading, userUpdated } = useSelector(state => state.users);
   const dispatch = useDispatch();
 
-  const toggleEditModal = record => {
-    const newModalState = !isEditModalOpen;
-
-    if (newModalState && record) {
+  const openEditModal = record => {
+    if (record) {
       dispatch(fetchUser(record.codigo));
     }
 
-    setIsEditModalOpen(newModalState);
+    setIsEditModalOpen(true);
   };
 
   const closeEditModal = () => {
@@ -32,7 +30,7 @@ const UsersTable = () => {
     }
   }, [userUpdated]);
 
-  const renderActions = (text, record) => <ActionList onEdit={() => toggleEditModal(record)} />;
+  const renderActions = (text, record) => <ActionList onEdit={() => openEditModal(record)} />;
 
   const columns = [
     {
@@ -65,7 +63,7 @@ const UsersTable = () => {
   return (
     <>
       <Table bordered columns={columns} dataSource={users} loading={loading} rowKey="codigo" />
-      <Modal visible={isEditModalOpen} onCancel={toggleEditModal} footer={null}>
+      <Modal visible={isEditModalOpen} onCancel={closeEditModal} footer={null}>
         {!!user && user.tipo === 'D' && (
           <DonatorForm isEdit initialValues={user} loading={loading} />
         )}

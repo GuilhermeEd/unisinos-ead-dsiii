@@ -16,6 +16,7 @@ const MoneyInput = ({ form, field }) => {
       style={{ width: '100%' }}
       defaultValue={0}
       min={0}
+      step={1000}
       {...field}
       onChange={handleChange}
     />
