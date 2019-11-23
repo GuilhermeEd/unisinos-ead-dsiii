@@ -167,7 +167,7 @@ const validationSchema = yup.object().shape({
     .date()
     .max(MAX_FOUNDATION_DATE.toISOString())
     .required(),
-  url: yup.string(),
+  url: yup.string().nullable(),
   cep: yup
     .string()
     .length(8)
@@ -180,13 +180,23 @@ const validationSchema = yup.object().shape({
   bairro: yup.string().required(),
   endereco: yup.string().required(),
   telefone: yup.string().required(),
-  banco: yup.string().max(4),
-  agencia: yup.string().max(10),
-  conta: yup.string().max(10),
-  ativo: yup.number()
+  banco: yup
+    .string()
+    .nullable()
+    .max(4),
+  agencia: yup
+    .string()
+    .nullable()
+    .max(10),
+  conta: yup
+    .string()
+    .nullable()
+    .max(10),
+  ativo: yup.bool().nullable()
 });
 
 const mapPropsToValues = props => {
+  console.log(props.initialValues);
   return props.initialValues || {};
 };
 

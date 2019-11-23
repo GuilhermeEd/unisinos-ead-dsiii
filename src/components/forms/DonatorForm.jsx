@@ -164,7 +164,7 @@ const validationSchema = yup.object().shape({
   endereco: yup.string().required(),
   telefone: yup.string().required(),
   pref_doacao: yup.number().required(),
-  ativo: yup.number()
+  ativo: yup.bool().nullable()
 });
 
 const mapPropsToValues = props => {
