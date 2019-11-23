@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -23,7 +23,13 @@ import * as Styled from './styles/Form.styles';
 
 const MAX_BIRTHDAY_DATE = moment().startOf('day');
 
-const DonatorForm = ({ handleSubmit, loading }) => {
+const DonatorForm = ({ handleSubmit, loading, userCreated, resetForm }) => {
+  useEffect(() => {
+    if (userCreated) {
+      resetForm();
+    }
+  }, [userCreated]);
+
   return (
     <Spin spinning={loading}>
       <Form onSubmit={handleSubmit}>
@@ -97,6 +103,8 @@ const DonatorForm = ({ handleSubmit, loading }) => {
 
 DonatorForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  userCreated: PropTypes.bool.isRequired,
+  resetForm: PropTypes.func.isRequired,
   loading: PropTypes.bool
 };
 
@@ -157,7 +165,8 @@ const handleSubmit = (values, formikBag) => {
 };
 
 const mapStateToProps = ({ users }) => ({
-  loading: users.loading
+  loading: users.loading,
+  userCreated: users.userCreated
 });
 
 const enhance = compose(
