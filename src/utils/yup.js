@@ -9,6 +9,7 @@ yup.setLocale({
   string: {
     email: 'Email inválido',
     min: 'Campo deve ter ao menos ${min} caracteres',
+    max: 'Campo deve ter no máximo ${max} caracteres',
     length: 'Campo deve ter exatamente ${length} caracteres'
   }
 });

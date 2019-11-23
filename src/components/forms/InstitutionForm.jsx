@@ -18,6 +18,7 @@ import UFInput from '../inputs/UFInput';
 import PaymentMethodInput from '../inputs/PaymentMethodInput';
 import AdminPermission from '../permissions/AdminPermission';
 import CheckboxInput from '../inputs/CheckboxInput';
+import EmailInput from '../inputs/EmailInput';
 
 import * as Styled from './styles/Form.styles';
 
@@ -33,7 +34,19 @@ const InstitutionForm = ({ handleSubmit, loading, userCreated, resetForm }) => {
   return (
     <Spin spinning={loading}>
       <Form onSubmit={handleSubmit}>
-        <Field name="nome" label="Razão Social" component={TextInput} placeholder="Razão Social" />
+        <Styled.Group>
+          <Styled.Item flex={1}>
+            <Field
+              name="nome"
+              label="Razão Social"
+              component={TextInput}
+              placeholder="Razão Social"
+            />
+          </Styled.Item>
+          <Styled.Item flex={1}>
+            <Field name="email" label="Email" component={EmailInput} placeholder="Email" />
+          </Styled.Item>
+        </Styled.Group>
         <Styled.Group>
           <Styled.Item flex={1}>
             <Field name="senha" label="Senha" component={PasswordInput} />
@@ -62,6 +75,11 @@ const InstitutionForm = ({ handleSubmit, loading, userCreated, resetForm }) => {
           </Styled.Item>
         </Styled.Group>
         <Styled.Group>
+          <Styled.Item flex={1}>
+            <Field name="url" label="Website" component={TextInput} placeholder="Website" />
+          </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
           <Styled.Item flex={3}>
             <Field name="cep" label="CEP" component={CEPInput} placeholder="CEP" />
           </Styled.Item>
@@ -76,36 +94,26 @@ const InstitutionForm = ({ handleSubmit, loading, userCreated, resetForm }) => {
           </Styled.Item>
         </Styled.Group>
         <Styled.Group>
+          <Styled.Item flex={2}>
+            <Field name="endereco" label="Endereço" component={TextInput} placeholder="Endereço" />
+          </Styled.Item>
           <Styled.Item flex={1}>
             <Field name="telefone" label="Telefone" component={TextInput} placeholder="Telefone" />
           </Styled.Item>
-          <Styled.Item flex={3}>
-            <Field name="url" label="Website" component={TextInput} placeholder="Website" />
-          </Styled.Item>
         </Styled.Group>
         <Styled.Group>
-          <Styled.Item flex={4}>
+          <Styled.Item flex={1}>
             <Field name="banco" label="Banco" component={TextInput} placeholder="Banco" />
           </Styled.Item>
           <Styled.Item flex={1}>
             <Field name="agencia" label="Agência" component={TextInput} placeholder="Agência" />
           </Styled.Item>
-          <Styled.Item flex={2}>
+          <Styled.Item flex={1}>
             <Field
               name="conta"
               label="Conta Corrente"
               component={TextInput}
               placeholder="Conta Corrente"
-            />
-          </Styled.Item>
-        </Styled.Group>
-        <Styled.Group>
-          <Styled.Item flex={1}>
-            <Field
-              name="pref_doacao"
-              label="Preferência para doação"
-              component={PaymentMethodInput}
-              placeholder="Preferência para doação"
             />
           </Styled.Item>
         </Styled.Group>
@@ -134,6 +142,14 @@ InstitutionForm.defaultProps = {
 };
 
 const validationSchema = yup.object().shape({
+  nome: yup
+    .string()
+    .min(3)
+    .required(),
+  email: yup
+    .string()
+    .email()
+    .required(),
   senha: yup
     .string()
     .min(6)
@@ -143,10 +159,6 @@ const validationSchema = yup.object().shape({
     .min(6)
     .equals(yup.ref('senha'), 'Senhas não conferem')
     .required(),
-  nome: yup
-    .string()
-    .min(3)
-    .required(),
   cpf_cnpj: yup
     .string()
     .length(14)
@@ -155,6 +167,7 @@ const validationSchema = yup.object().shape({
     .date()
     .max(MAX_FOUNDATION_DATE.toISOString())
     .required(),
+  url: yup.string(),
   cep: yup
     .string()
     .length(8)
@@ -165,12 +178,11 @@ const validationSchema = yup.object().shape({
     .required(),
   cidade: yup.string().required(),
   bairro: yup.string().required(),
+  endereco: yup.string().required(),
   telefone: yup.string().required(),
-  url: yup.string().required(),
-  banco: yup.string().required(),
-  agencia: yup.string().required(),
-  conta: yup.string().required(),
-  pref_doacao: yup.number().required(),
+  banco: yup.string().max(4),
+  agencia: yup.string().max(10),
+  conta: yup.string().max(10),
   ativo: yup.number()
 });
 

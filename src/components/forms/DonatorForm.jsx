@@ -17,6 +17,7 @@ import UFInput from '../inputs/UFInput';
 import PaymentMethodInput from '../inputs/PaymentMethodInput';
 import AdminPermission from '../permissions/AdminPermission';
 import CheckboxInput from '../inputs/CheckboxInput';
+import EmailInput from '../inputs/EmailInput';
 import SubmitButton from '../buttons/SubmitButton';
 
 import * as Styled from './styles/Form.styles';
@@ -33,7 +34,14 @@ const DonatorForm = ({ handleSubmit, loading, userCreated, resetForm }) => {
   return (
     <Spin spinning={loading}>
       <Form onSubmit={handleSubmit}>
-        <Field name="nome" label="Nome" component={TextInput} placeholder="Nome" />
+        <Styled.Group>
+          <Styled.Item flex={1}>
+            <Field name="nome" label="Nome" component={TextInput} placeholder="Nome" />
+          </Styled.Item>
+          <Styled.Item flex={1}>
+            <Field name="email" label="Email" component={EmailInput} placeholder="Email" />
+          </Styled.Item>
+        </Styled.Group>
         <Styled.Group>
           <Styled.Item flex={1}>
             <Field name="senha" label="Senha" component={PasswordInput} />
@@ -76,9 +84,14 @@ const DonatorForm = ({ handleSubmit, loading, userCreated, resetForm }) => {
           </Styled.Item>
         </Styled.Group>
         <Styled.Group>
-          <Styled.Item>
+          <Styled.Item flex={2}>
+            <Field name="endereco" label="Endereço" component={TextInput} placeholder="Endereço" />
+          </Styled.Item>
+          <Styled.Item flex={1}>
             <Field name="telefone" label="Telefone" component={TextInput} placeholder="Telefone" />
           </Styled.Item>
+        </Styled.Group>
+        <Styled.Group>
           <Styled.Item flex={1}>
             <Field
               name="pref_doacao"
@@ -113,6 +126,14 @@ DonatorForm.defaultProps = {
 };
 
 const validationSchema = yup.object().shape({
+  nome: yup
+    .string()
+    .min(3)
+    .required(),
+  email: yup
+    .string()
+    .email()
+    .required(),
   senha: yup
     .string()
     .min(6)
@@ -122,13 +143,9 @@ const validationSchema = yup.object().shape({
     .min(6)
     .equals(yup.ref('senha'), 'Senhas não conferem')
     .required(),
-  nome: yup
-    .string()
-    .min(3)
-    .required(),
   cpf_cnpj: yup
     .string()
-    .length(12)
+    .length(11)
     .required(),
   data: yup
     .date()
@@ -144,6 +161,7 @@ const validationSchema = yup.object().shape({
     .required(),
   cidade: yup.string().required(),
   bairro: yup.string().required(),
+  endereco: yup.string().required(),
   telefone: yup.string().required(),
   pref_doacao: yup.number().required(),
   ativo: yup.number()
