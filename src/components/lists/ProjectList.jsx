@@ -6,6 +6,8 @@ import { fetchProjects } from '../../store/donations/actions';
 
 import DonateButton from '../buttons/DonateButton';
 
+import * as Styled from './styles/ProjectList.style';
+
 const ProjectList = () => {
   const { projects, loading } = useSelector(state => state.donations);
   const dispatch = useDispatch();
@@ -15,6 +17,13 @@ const ProjectList = () => {
   }, [dispatch]);
 
   const items = projects.map(project => {
+    const title = (
+      <Styled.ItemTitle>
+        <Typography.Title level={4}>{project.nome}</Typography.Title>
+        {project.URL && <a href={project.URL}>visitar site</a>}
+      </Styled.ItemTitle>
+    );
+
     const description = (
       <Typography.Paragraph ellipsis={{ rows: 3, expandable: true }}>
         {project.descricao}
@@ -22,14 +31,14 @@ const ProjectList = () => {
     );
 
     const donateButton = (
-      <div style={{ marginLeft: '1rem' }}>
+      <Styled.ItemDonateButtonContainer>
         <DonateButton project={project} />
-      </div>
+      </Styled.ItemDonateButtonContainer>
     );
 
     return (
       <List.Item key={project.codigo} extra={donateButton}>
-        <List.Item.Meta title={project.nome} description={description} />
+        <List.Item.Meta title={title} description={description} />
       </List.Item>
     );
   });
