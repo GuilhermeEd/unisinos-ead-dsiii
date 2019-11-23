@@ -23,9 +23,13 @@ const ProjectsTable = () => {
     setIsEditModalOpen(newModalState);
   };
 
+  const closeEditModel = () => {
+    setIsEditModalOpen(false);
+  };
+
   useEffect(() => {
     if (projectUpdated) {
-      toggleEditModal();
+      closeEditModel();
     }
   }, [projectUpdated]);
 

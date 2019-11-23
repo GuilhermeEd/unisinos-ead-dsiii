@@ -22,9 +22,13 @@ const UsersTable = () => {
     setIsEditModalOpen(newModalState);
   };
 
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
   useEffect(() => {
     if (userUpdated) {
-      toggleEditModal();
+      closeEditModal();
     }
   }, [userUpdated]);
 
