@@ -1,0 +1,75 @@
+CREATE TABLE usuario ( 
+	codigo INT unsigned not null auto_increment, 
+	email varchar(80) not null, 
+	senha varchar(30) not null,
+	nome varchar(100) not null,
+	tipo ENUM('I','D') not null,
+	constraint pk_usuario primary key (codigo) 
+) ENGINE = innodb;
+
+ALTER TABLE usuario ADD COLUMN cpf_cnpj VARCHAR(20) NOT NULL;
+ALTER TABLE usuario ADD COLUMN data DATE NOT NULL default '1900-01-01';
+ALTER TABLE usuario ADD COLUMN cep VARCHAR(9) NOT NULL;
+ALTER TABLE usuario ADD COLUMN uf CHAR(2) NOT NULL;
+ALTER TABLE usuario ADD COLUMN cidade VARCHAR(50) NOT NULL;
+ALTER TABLE usuario ADD COLUMN bairro VARCHAR(50) NOT NULL;
+ALTER TABLE usuario ADD COLUMN endereco VARCHAR(100) NOT NULL;
+ALTER TABLE usuario ADD COLUMN telefone VARCHAR(20) NOT NULL;
+ALTER TABLE usuario ADD COLUMN pref_doacao_doador TINYINT UNSIGNED NOT NULL;
+ALTER TABLE usuario ADD COLUMN url_instituicao VARCHAR(200);
+ALTER TABLE usuario ADD COLUMN banco_instituicao VARCHAR(4);
+ALTER TABLE usuario ADD COLUMN agencia_instituicao VARCHAR(10);
+ALTER TABLE usuario ADD COLUMN conta_corrente_instituicao VARCHAR(10);
+ALTER TABLE usuario ADD COLUMN ativo BOOLEAN NOT NULL;
+
+
+
+
+CREATE TABLE projeto ( 
+	codigo INT unsigned not null auto_increment,
+	nome varchar(80) not null, 
+	descricao TEXT not null, 
+	ativo BOOLEAN NOT NULL,
+	encerrar_projeto_objetivo BOOLEAN NOT NULL,
+	data_inicio DATE NOT NULL,
+	data_fim DATE,
+	URL varchar(200),
+	objetivo_arrecadacao DECIMAL(12,2) NOT NULL,
+	codigo_usuario INT unsigned not null,
+	constraint pk_projeto primary key (codigo) 
+) ENGINE = innodb;
+
+
+CREATE TABLE doacao (
+	codigo INT unsigned not null auto_increment,
+	confirmacao BOOLEAN NOT NULL,
+	valor DECIMAL(12,2) NOT NULL,
+	codigo_usuario INT unsigned not null,
+	codigo_projeto INT unsigned not null,
+	constraint pk_doacao primary key (codigo) 
+) ENGINE = innodb;
+
+ALTER TABLE doacao ADD COLUMN metodo_doacao TINYINT UNSIGNED NOT NULL AFTER valor;
+ALTER TABLE doacao ADD COLUMN dados_doacao TEXT AFTER metodo_doacao;
+
+
+
+alter table projeto drop foreign key fk_usuario;
+ALTER TABLE projeto ADD CONSTRAINT fk_usuario FOREIGN KEY ( codigo_usuario ) REFERENCES usuario ( codigo ) ON DELETE CASCADE ;
+
+
+
+ALTER TABLE doacao ADD CONSTRAINT fk_doacao_usuario FOREIGN KEY ( codigo_usuario ) REFERENCES usuario ( codigo ) ON DELETE CASCADE;
+ALTER TABLE doacao ADD CONSTRAINT fk_doacao_projeto FOREIGN KEY ( codigo_projeto ) REFERENCES projeto ( codigo ) ON DELETE CASCADE;
+
+
+
+
+
+
+SELECT projeto.codigo, projeto.nome AS "nome_projeto", projeto.ativo, usuario.nome as "nome_instituicao", COALESCE(SUM(doacao.valor),0) as "total_doacao"
+FROM projeto
+LEFT JOIN usuario ON (projeto.codigo_usuario = usuario.codigo)
+LEFT JOIN doacao ON (doacao.codigo_projeto = projeto.codigo AND doacao.confirmacao = TRUE)
+GROUP BY 1;
+
